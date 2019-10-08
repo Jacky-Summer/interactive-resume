@@ -58,4 +58,19 @@ let loadingRender = (function(){
         }
     }
 })();
-loadingRender.init();
+
+/*HASH*/
+let url = window.location.href, 
+    well = url.indexOf('#'),
+    hash = well === -1 ? null : url.substr(well + 1);
+
+switch (hash) {
+    case 'loading':
+        loadingRender.init();
+        break;
+    case 'phone':
+        phoneRender.init();
+        break;
+    default:
+        loadingRender.init();
+}

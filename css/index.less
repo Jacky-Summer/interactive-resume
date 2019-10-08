@@ -22,13 +22,14 @@ html, body {
     background: #FFF;
 }
   
-.loadingBox{
+.loadingBox, .phoneBox{
     display: none;
     position: relative;
     height: 100%;
     overflow: hidden;
 }
 
+/* loadingBox */
 .loadingBox{
     background: #000;
 
@@ -87,5 +88,12 @@ html, body {
     100% {
       background-position: 0 -.3rem;
     }
-  }
+}
+
+/* phoneBox */
+.phoneBox{
+    display: block;
+    background-size: cover;
+    background: url(../images/zf_phoneBg.jpg);
+}
 
