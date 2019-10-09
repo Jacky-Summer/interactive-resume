@@ -93,7 +93,88 @@ html, body {
 /* phoneBox */
 .phoneBox{
     display: block;
+    z-index: -2;
     background-size: cover;
     background: url(../images/zf_phoneBg.jpg);
-}
+    text-align: center;
+    color: #FFF;
 
+    h2{
+        font-size: .5rem;
+        margin-top: 1rem;
+    }
+
+    h3{ 
+        display: none;
+        margin-top: .2rem;
+        line-height: .3rem;
+        font-size: .3rem;
+        
+        letter-spacing: .05rem;
+    }
+
+    .answer{
+        position: absolute;
+        bottom: .3rem;
+        left: 50%;
+        margin-left: -2.6rem;
+        width: 5.2rem;
+        height: 3.6rem;
+        background: url(../images/zf_phoneListen.png) no-repeat;
+        background-size: 100% 100%;
+
+        .markMove {
+            position: absolute;
+            right: -.06rem;
+            bottom: .48rem;
+            z-index: -1;
+            box-sizing: border-box;
+            width: 1.6rem;
+            height: 1.6rem;
+            border-radius: 50%;
+            border: .03rem solid #0F0;
+            animation: answerMove 1s linear infinite both;
+        }
+    
+        .markLink {
+            .markMove; //=>把MARK-MOVE的样式继承过来使用
+            z-index: 1;
+            border: none;
+            border-radius: 0;
+            animation: none;
+        }
+    }
+
+    .hang{
+        position: absolute;
+        bottom: .3rem;
+        left: 50%;
+        margin-left: -2.6rem;
+        width: 5.2rem;
+        height: 6.59rem;
+        background: url('../images/zf_phoneDetail.png') no-repeat;
+        background-size: 100% 100%;
+
+        //=>初始位置是在PHONE的底部（看不见：溢出内容隐藏），当点击接听按钮后，控制它从底下出来即可（JS中改变样式）
+        transform: translateY(6.89rem);
+        transition: .3s;
+
+        .markLink {
+            position: absolute;
+            bottom: .26rem;
+            left: 50%;
+            z-index: 1;
+            margin-left: -.8rem;
+            width: 1.6rem;
+            height: 1.6rem;
+        }
+    }
+}
+@keyframes answerMove {
+    from {
+      transform: scale(1.2);
+    }
+    to {
+      transform: scale(0);
+    }
+  }

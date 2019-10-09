@@ -47,6 +47,7 @@ let loadingRender = (function(){
         let timer = setTimeout(() => {
             $loadingBox.remove();
             clearTimeout(timer);
+            phoneRender.init();
         },1000);
     }
 
@@ -55,6 +56,78 @@ let loadingRender = (function(){
             $loadingBox.css('display', 'block');
             run(done);
             maxDelay(done);
+        }
+    }
+})();
+
+let phoneRender = (function(){
+    let $phoneBox = $('.phoneBox'),
+        $time = $phoneBox.find('h3'),
+        $answer = $('.answer'),
+        $markMove = $('.markMove'),
+        $answerMarkLink = $answer.find('.markLink'),
+        $hang = $('.hang'),
+        $hangMarkLink = $('.hang').find('.markLink'),
+        answerBell = $('#answerBell')[0],
+        introduction = $('#introBell')[0];
+
+    
+    //=>点击ANSWER-MARK
+    let answerMarkTouch = function answerMarkTouch() {
+        //1.REMOVE ANSWER
+        $answer.remove();
+        answerBell.pause();
+        $(answerBell).remove();//=>一定要先暂停播放然后再移除，否则即使移除了浏览器也会播放着这个声音
+
+        //2.SHOW HANG
+        $hang.css('transform', 'translateY(0rem)');
+        $time.css('display', 'block');
+        introduction.play();
+        computedTime();
+    }
+
+    //=>计算播放时间
+    let autoTimer = null;
+    let computedTime = function computedTime() {
+        autoTimer = setInterval(() => {
+            let val = introduction.currentTime,
+                duration = introduction.duration;
+                console.log(val,duration)
+            //播放完成  
+            if(val >= duration){
+                clearInterval(autoTimer);
+                closePhone();
+                return;
+            }
+
+            let minute = Math.floor(val / 60),
+                second = Math.floor(val - minute * 60);
+            minute = minute < 10 ? '0' + minute : minute;
+            second = second < 10 ? '0' + second : second;
+            $time.html(`${minute}:${second}`);
+
+        }, 1000);
+    }
+
+    //=>关闭PHONE
+    let closePhone = function closePhone() {
+        clearInterval(autoTimer);
+        introduction.pause();
+        $(introduction).remove();
+        $phoneBox.remove();
+
+        // messageRender.init();
+    };
+
+    return {
+        init:function(){
+            $phoneBox.css('display', 'block');
+             //=>播放BELL
+            answerBell.play();
+            answerBell.volume = 0.3;
+
+            $answerMarkLink.tap(answerMarkTouch);
+            $hangMarkLink.tap(closePhone);
         }
     }
 })();
