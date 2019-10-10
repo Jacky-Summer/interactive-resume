@@ -116,7 +116,7 @@ let phoneRender = (function(){
         $(introduction).remove();
         $phoneBox.remove();
 
-        // messageRender.init();
+        messageRender.init();
     };
 
     return {
@@ -132,6 +132,42 @@ let phoneRender = (function(){
     }
 })();
 
+let messageRender = (function(){
+    let $messageBox = $('.messageBox'),
+    $wrapper = $messageBox.find('.wrapper'),
+    $messageList = $wrapper.find('li'),
+    $keyBoard = $messageBox.find('.keyBoard'),
+    $textInp = $keyBoard.find('span'),
+    $submit = $keyBoard.find('.submit'),
+    demonMusic = $('#demonMusic')[0];
+
+    let showMessage = function showMessage(){
+        let step = -1,
+            len = $messageList.length + 1,
+            autoTimer = null,
+            interval = 2000,
+            $cur = null;
+        autoTimer = setInterval(() => {
+            ++step;
+            $cur = $messageList.eq(step).addClass('active');
+
+        },interval);
+        
+        
+
+        
+
+
+    };
+
+
+    return {
+        init:function(){
+            $messageBox.css('display','block');
+            // showMessage();
+        }
+    }
+})();
 /*HASH*/
 let url = window.location.href, 
     well = url.indexOf('#'),
@@ -144,6 +180,10 @@ switch (hash) {
     case 'phone':
         phoneRender.init();
         break;
+    case 'messageBox':
+        messageRender.init();
+        break;
     default:
         loadingRender.init();
+
 }
