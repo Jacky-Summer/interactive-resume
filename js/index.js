@@ -141,30 +141,94 @@ let messageRender = (function(){
     $submit = $keyBoard.find('.submit'),
     demonMusic = $('#demonMusic')[0];
 
+    let step = -1,
+        total = $messageList.length + 1,
+        autoTimer = null,
+        interval = 2000;
+
+    let tt = 0;
     let showMessage = function showMessage(){
-        let step = -1,
-            len = $messageList.length + 1,
-            autoTimer = null,
-            interval = 2000,
-            $cur = null;
-        autoTimer = setInterval(() => {
-            ++step;
-            $cur = $messageList.eq(step).addClass('active');
-
-        },interval);
+    
+        ++step;
+        if(step === 2){
+            clearTimeout(autoTimer);
+            handleSend();
+            return;
+        }
+        let $cur = $messageList.eq(step).addClass('active');  
         
-        
+        if(step >=3){
+            //=>展示的条数已经是四条或者四条以上了,此时让WRAPPER向上移动(移动的距离是新展示这一条的高度)
+            let curH = $cur[0].offsetHeight;
+            tt -= curH;
+            $wrapper.css('transform', `translateY(${tt}px)`);
+        }
 
-        
-
-
+        if (step >= total - 1) {
+            //=>展示完了
+            clearInterval(autoTimer);
+            closeMessage();
+        }
     };
 
+    let handleSend = function handleSend(){
+        $keyBoard.css('transform','translateY(0)');
+        let str = '好的,马上介绍!';
+        let n = -1;
+            strLength = str.length,
+            timer = null;
+        timer = setInterval(() => {
+            let orginHTML = $textInp.html();
+            $textInp.html(orginHTML + str[++n]);
+            if( n >= strLength - 1){
+                clearInterval(timer);
+                $submit.css('display','block');
+            }
+        },100);  
+    }
+
+    //=>点击SUBMIT
+    let handleSubmit = function handleSubmit() {
+        $(`<li class="self">
+        <i class="arrow"></i>
+        <img src="./images/zf_messageStudent.png" alt="" class="pic">
+        ${$textInp.html()}</li>`).insertAfter($messageList.eq(1)).addClass('active');
+
+        $messageList = $wrapper.find('li');
+        $submit.css('display','none');
+        $keyBoard.css('transform','translateY(3.7rem)');
+
+        $textInp.html('');
+
+        //=>继续向下展示剩余的消息
+        autoTimer = setInterval(showMessage, interval);
+        
+    }
+
+    let closeMessage = function closeMessage(){
+        let delayTimer = setTimeout(() => {
+            demonMusic.pause();
+            $(demonMusic).remove();
+            $messageBox.remove();
+            clearTimeout(delayTimer);
+
+            // cubeRender.init();
+        }, interval);
+    }
 
     return {
         init:function(){
             $messageBox.css('display','block');
-            // showMessage();
+
+            showMessage();
+            autoTimer = setInterval(showMessage,interval);
+
+            //=>SUBMIT
+            $submit.tap(handleSubmit);
+
+            demonMusic.volume = 0.3;
+            demonMusic.play();
+
         }
     }
 })();
