@@ -212,7 +212,7 @@ let messageRender = (function(){
             $messageBox.remove();
             clearTimeout(delayTimer);
 
-            // cubeRender.init();
+            cubeRender.init();
         }, interval);
     }
 
@@ -232,6 +232,14 @@ let messageRender = (function(){
         }
     }
 })();
+
+let cubeRender = (function(){
+    return {
+        init:function(){
+            $('.cubeBox').css('display','block');
+        }
+    }
+})();
 /*HASH*/
 let url = window.location.href, 
     well = url.indexOf('#'),
@@ -246,6 +254,9 @@ switch (hash) {
         break;
     case 'messageBox':
         messageRender.init();
+        break;
+    case 'cube':
+        cubeRender.init();
         break;
     default:
         loadingRender.init();
